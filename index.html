@@ -1,0 +1,356 @@
+
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Enhanced Star Wars Animation with Hyperspace</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.cdnfonts.com/css/star-jedi" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      overflow: hidden;
+      background-color: #000;
+      color: #ffe81f;
+      cursor: url('https://cur.cursors-4u.net/symbols/sym-7/sym617.cur'), auto;
+    }
+
+    .container {
+      position: relative;
+      width: 100%;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    /* .animatedImage is removed, only .character remains relevant for sizing */
+    .character {
+      position: absolute;
+      max-width: 250px; /* Reduced max-width for better spacing */
+      height: auto;
+      border-radius: 1rem;
+      will-change: transform;
+    }
+
+    .glow-purple {
+      box-shadow: 0 0 30px 10px rgba(183, 0, 255, 0.9), 0 0 60px 20px rgba(183, 0, 255, 0.6);
+    }
+
+    .glow-red {
+      box-shadow: 0 0 30px 10px rgba(255, 0, 0, 0.9), 0 0 60px 20px rgba(255, 0, 0, 0.6);
+    }
+
+    .glow-blue {
+      box-shadow: 0 0 30px 10px rgba(0, 0, 255, 0.9), 0 0 60px 20px rgba(0, 0, 255, 0.6);
+    }
+
+    .crawl-container {
+      position: absolute;
+      bottom: 0;
+      width: 80%;
+      max-width: 800px;
+      height: 50%;
+      overflow: hidden;
+      perspective: 300px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .crawl-text {
+      position: absolute;
+      font-family: 'Star Jedi', sans-serif;
+      font-size: 1.5rem;
+      line-height: 1.5;
+      text-align: justify;
+      transform-origin: 50% 100%;
+      animation: crawl 60s linear infinite;
+      color: #ffe81f;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+    }
+
+    @keyframes crawl {
+      0% { top: 100%; transform: rotateX(20deg) scale(1); opacity: 1; }
+      90% { opacity: 1; }
+      100% { top: -200%; transform: rotateX(25deg) scale(0.5); opacity: 0; }
+    }
+
+    canvas#starfield, canvas#hyperspace {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+    }
+
+    #tieFighter {
+      position: absolute;
+      top: 10%;
+      left: -100px;
+      width: 100px;
+      transition: transform 6s linear;
+      z-index: 5;
+    }
+
+    #startButton {
+      background-color: #ffe81f;
+      color: #000;
+      font-family: 'Star Jedi', sans-serif;
+      padding: 1rem 2rem;
+      font-size: 1.5rem;
+      border-radius: 0.5rem;
+      cursor: pointer;
+      border: none;
+      box-shadow: 0 0 20px rgba(255, 232, 31, 0.7);
+      transition: all 0.3s ease;
+      z-index: 10; /* Ensure it's above other elements */
+    }
+
+    #startButton:hover {
+      background-color: #f0d81a;
+      box-shadow: 0 0 30px rgba(255, 232, 31, 0.9);
+      transform: scale(1.05);
+    }
+
+    .hidden-content {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+<canvas id="starfield"></canvas>
+<canvas id="hyperspace"></canvas>
+
+<div class="container" id="mainContent" style="display: none;">
+  <!-- The main animated image (Brandon Windu) has been removed -->
+  <img id="tieFighter" src="image/vaders-tie-fighter.jpeg" alt="TIE Fighter" />
+
+  <!-- Characters with adjusted positions to prevent overlapping -->
+  <img class="character glow-purple" id="jediSolis" src="image/Finn_Windu_ AKA Jedi Solis.png" alt="Jedi Solis" style="top: 15%; left: 15%; opacity: 0;" />
+  <img class="character glow-red" id="darthNightmare" src="image/Darth Nightmare.jpeg" alt="Darth Nightmare" style="bottom: 10%; left: 25%; opacity: 0;" />
+  <img class="character glow-red" id="sithJayden" src="image/ Sith Jayden_Windu .png" alt="Sith Jayden" style="top: 25%; right: 15%; opacity: 0;" />
+  <img class="character glow-blue" id="brandon" src="image/Brandon_Windu AKA Jedi Azarik.png" alt="Brandon" style="top: 50%; right: 35%; opacity: 0;" />
+
+  <div class="crawl-container">
+    <div class="crawl-text">
+      A long time ago in a galaxy far, far away....<br /><br />
+      It is a period of civil war. Rebel spaceships, striking from a hidden base, have won their first victory against the evil Galactic Empire...
+    </div>
+  </div>
+</div>
+
+<button id="startButton">Start Star Wars Animation</button>
+
+<audio id="starWarsAudio" src="https://actions.google.com/sounds/v1/movies/star_wars_theme.ogg" loop></audio>
+<audio id="saberSound" src="https://freesound.org/data/previews/341/341695_3248244-lq.mp3"></audio>
+<audio id="flybySound" src="https://freesound.org/data/previews/331/331912_3248244-lq.mp3"></audio>
+
+<script>
+  // animatedImage is no longer needed as the element has been removed
+  // const animatedImage = document.getElementById('animatedImage');
+  const audio = document.getElementById('starWarsAudio');
+  const saber = document.getElementById('saberSound');
+  const flyby = document.getElementById('flybySound');
+  const tieFighter = document.getElementById('tieFighter');
+  const startButton = document.getElementById('startButton');
+  const mainContent = document.getElementById('mainContent');
+
+  // positionX, direction, and speed variables were related to animatedImage movement,
+  // and are now obsolete.
+  // let positionX = -animatedImage.offsetWidth;
+  // let direction = 1;
+  // const speed = 1;
+
+  /**
+   * The animateImage function was specifically for the removed animatedImage.
+   * It is no longer needed.
+   */
+  // function animateImage() {
+  //   const containerWidth = animatedImage.parentElement.offsetWidth;
+  //   const targetPositionX = containerWidth * 0.25;
+  //   animatedImage.style.transform = `translateX(${targetPositionX}px)`;
+  // }
+
+  /**
+   * Launches the TIE Fighter across the screen.
+   * Plays a flyby sound effect and resets the TIE Fighter for the next launch.
+   */
+  function launchTIEFighter() {
+    // Move TIE Fighter off-screen to the right
+    tieFighter.style.transform = 'translateX(120vw)';
+    // Reset and play the flyby sound
+    flyby.currentTime = 0;
+    flyby.play();
+    // After a delay, reset the TIE Fighter's position and transition for the next launch
+    setTimeout(() => {
+      tieFighter.style.transition = 'none'; // Disable transition for instant reset
+      tieFighter.style.transform = 'translateX(0)'; // Reset to initial off-screen left position
+      void tieFighter.offsetWidth; // Trigger reflow to apply 'none' transition immediately
+      tieFighter.style.transition = 'transform 6s linear'; // Re-enable transition for the next animation
+    }, 7000); // Wait for the TIE Fighter to fly across and a bit more before resetting
+  }
+
+  /**
+   * Shows a character image with a fade-in effect after a specified delay.
+   * @param {string} id - The ID of the character image element.
+   * @param {number} delay - The delay in milliseconds before showing the character.
+   */
+  function showCharacter(id, delay = 0) {
+    setTimeout(() => {
+      const el = document.getElementById(id);
+      if (el) { // Ensure the element exists before trying to modify it
+        el.style.transition = 'opacity 2s ease-in-out'; // Smooth fade-in transition
+        el.style.opacity = 1; // Make the character visible
+      }
+    }, delay);
+  }
+
+  /**
+   * Starts all animations and audio after user interaction.
+   */
+  function startAllAnimations() {
+    // Hide the start button and show the main content
+    startButton.style.display = 'none';
+    mainContent.style.display = 'flex'; // Or 'block', depending on desired layout
+
+    // animateImage() is no longer called as the element has been removed
+
+    // Play the main Star Wars theme audio
+    audio.play().catch(error => console.warn('Audio playback failed:', error));
+    // Periodically launch the TIE Fighter
+    setInterval(launchTIEFighter, 15000); // Every 15 seconds
+    // Show characters with staggered delays
+    showCharacter('jediSolis', 1000); // 1 second delay
+    showCharacter('darthNightmare', 3000); // 3 second delay
+    showCharacter('sithJayden', 5000); // 5 second delay
+    showCharacter('brandon', 7000); // 7 second delay
+    // Start the hyperspace effect after a delay
+    startHyperspace();
+  }
+
+  // --- Event Listeners and Initial Setup ---
+  window.onload = function () {
+    // Attach click listener to the start button
+    startButton.addEventListener('click', startAllAnimations);
+    // Initially hide the main content until the button is clicked
+    mainContent.style.display = 'none';
+  };
+
+  // Event listeners for animatedImage are removed as the element has been removed
+  // animatedImage.addEventListener('mouseenter', () => {
+  //   saber.currentTime = 0;
+  //   saber.play();
+  // });
+
+  // animatedImage.addEventListener('click', () => {
+  //   animatedImage.style.transition = 'transform 0.5s ease-out';
+  //   animatedImage.style.transform += ' translateZ(-500px) scale(0.1)';
+  //   setTimeout(() => {
+  //     animatedImage.style.transition = '';
+  //     positionX = -animatedImage.offsetWidth;
+  //   }, 600);
+  // });
+
+  // --- Starfield Effect ---
+  const starCanvas = document.getElementById('starfield');
+  const starCtx = starCanvas.getContext('2d');
+  let stars = []; // Array to hold star objects
+
+  /**
+   * Resizes both starfield and hyperspace canvases to fill the window.
+   */
+  function resizeCanvas() {
+    starCanvas.width = window.innerWidth;
+    starCanvas.height = window.innerHeight;
+    hyperCanvas.width = window.innerWidth;
+    hyperCanvas.height = window.innerHeight;
+  }
+
+  // Listen for window resize events to adjust canvas size
+  window.addEventListener('resize', resizeCanvas);
+
+  // Initialize stars for the starfield
+  for (let i = 0; i < 200; i++) {
+    stars.push({
+      x: Math.random() * window.innerWidth,
+      y: Math.random() * window.innerHeight,
+      radius: Math.random() * 1.5,
+      speed: Math.random() * 0.5 + 0.2
+    });
+  }
+
+  /**
+   * Draws and animates the stars in the starfield.
+   */
+  function drawStars() {
+    starCtx.clearRect(0, 0, starCanvas.width, starCanvas.height); // Clear the canvas
+    starCtx.fillStyle = '#fff'; // White color for stars
+    for (let star of stars) {
+      starCtx.beginPath();
+      starCtx.arc(star.x, star.y, star.radius, 0, Math.PI * 2); // Draw a circle
+      starCtx.fill(); // Fill the circle
+      star.y += star.speed; // Move star downwards
+      // If star goes off-screen, reset its position to the top
+      if (star.y > starCanvas.height) {
+        star.y = 0;
+        star.x = Math.random() * starCanvas.width;
+      }
+    }
+    requestAnimationFrame(drawStars); // Loop the animation
+  }
+  drawStars(); // Start the starfield animation
+
+  // --- Hyperspace Effect ---
+  const hyperCanvas = document.getElementById('hyperspace');
+  const hyperCtx = hyperCanvas.getContext('2d');
+  let hyperStars = []; // Array to hold hyperspace star objects
+
+  // Initialize stars for the hyperspace effect
+  for (let i = 0; i < 100; i++) {
+    hyperStars.push({
+      x: window.innerWidth / 2, // Start at the center
+      y: window.innerHeight / 2, // Start at the center
+      dx: (Math.random() - 0.5) * 2, // Random horizontal direction
+      dy: (Math.random() - 0.5) * 2, // Random vertical direction
+      length: Math.random() * 20 + 10 // Random length for the "streaks"
+    });
+  }
+
+  /**
+   * Draws and animates the hyperspace effect.
+   */
+  function drawHyperspace() {
+    // Fill the canvas with a semi-transparent black to create a trailing effect
+    hyperCtx.fillStyle = 'rgba(0, 0, 0, 0.2)';
+    hyperCtx.fillRect(0, 0, hyperCanvas.width, hyperCanvas.height);
+    hyperCtx.strokeStyle = '#00f6ff'; // Cyan color for hyperspace streaks
+    for (let star of hyperStars) {
+      hyperCtx.beginPath();
+      hyperCtx.moveTo(star.x, star.y); // Start drawing from current position
+      star.x += star.dx * 10; // Move star rapidly
+      star.y += star.dy * 10; // Move star rapidly
+      hyperCtx.lineTo(star.x, star.y); // Draw line to new position
+      hyperCtx.stroke(); // Render the line
+      // If star goes off-screen, reset it to the center
+      if (star.x < 0 || star.x > hyperCanvas.width || star.y < 0 || star.y > hyperCanvas.height) {
+        star.x = window.innerWidth / 2;
+        star.y = window.innerHeight / 2;
+      }
+    }
+    requestAnimationFrame(drawHyperspace); // Loop the animation
+  }
+
+  /**
+   * Starts the hyperspace effect after a delay.
+   */
+  function startHyperspace() {
+    // Delay hyperspace start for an initial starfield view
+    setTimeout(drawHyperspace, 10000); // 10 seconds delay
+  }
+</script>
+</body>
+</html>
