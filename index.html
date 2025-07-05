@@ -191,6 +191,9 @@
   </div>
 </div>
 
+<button id="lightspeedButton" style="margin-bottom: 10px; font-family: 'Star Jedi', sans-serif; font-size: 1.2rem; padding: 0.5rem 1rem; border-radius: 0.5rem; cursor: pointer; background-color: #ffe81f; border: none; box-shadow: 0 0 20px rgba(255, 232, 31, 0.7); transition: all 0.3s ease; z-index: 15;">
+  Lightspeed Jump
+</button>
 <button id="startButton">Start Star Wars Animation</button>
 
 <audio id="starWarsAudio" src="https://actions.google.com/sounds/v1/movies/star_wars_theme.ogg" loop></audio>
@@ -205,6 +208,7 @@
   const flyby = document.getElementById('flybySound');
   const tieFighter = document.getElementById('tieFighter');
   const startButton = document.getElementById('startButton');
+  const lightspeedButton = document.getElementById('lightspeedButton');
   const mainContent = document.getElementById('mainContent');
 
   // positionX, direction, and speed variables were related to animatedImage movement,
