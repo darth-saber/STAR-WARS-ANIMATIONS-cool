@@ -30,11 +30,51 @@
     /* .animatedImage is removed, only .character remains relevant for sizing */
     .character {
       position: absolute;
-      max-width: 250px; /* Reduced max-width for better spacing */
+      max-width: 300px; /* Reduced max-width for better fit */
       height: auto;
       border-radius: 1rem;
       will-change: transform;
+      z-index: 1; /* Put characters behind text */
     }
+
+    .crawl-container {
+      position: absolute;
+      bottom: 0;
+      width: 80%;
+      max-width: 800px;
+      height: 50%;
+      overflow: hidden;
+      perspective: 300px;
+      display: flex;
+      justify-content: center;
+      z-index: 20; /* Ensure crawl text is above characters */
+    }
+
+    .crawl-text {
+      position: absolute;
+      font-family: 'Star Jedi', sans-serif;
+      font-size: 1.5rem;
+      line-height: 1.5;
+      text-align: justify;
+      transform-origin: 50% 100%;
+      animation: crawl 60s linear infinite;
+      color: #ffe81f;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+      z-index: 20; /* Ensure crawl text is above characters */
+    }
+=======
+  .crawl-container {
+    position: absolute;
+    bottom: 0;
+    width: 80%;
+    max-width: 800px;
+    height: 50%;
+    overflow: hidden;
+    perspective: 300px;
+    display: flex;
+    justify-content: center;
++   z-index: 20; /* Ensure crawl text is above characters */
+  }
 
     .glow-purple {
       box-shadow: 0 0 30px 10px rgba(183, 0, 255, 0.9), 0 0 60px 20px rgba(183, 0, 255, 0.6);
@@ -130,10 +170,18 @@
   <img id="tieFighter" src="image/vaders-tie-fighter.jpeg" alt="TIE Fighter" />
 
   <!-- Characters with adjusted positions to prevent overlapping -->
-  <img class="character glow-purple" id="jediSolis" src="image/Finn_Windu_ AKA Jedi Solis.png" alt="Jedi Solis" style="top: 15%; left: 15%; opacity: 0;" />
-  <img class="character glow-red" id="darthNightmare" src="image/Darth Nightmare.jpeg" alt="Darth Nightmare" style="bottom: 10%; left: 25%; opacity: 0;" />
-  <img class="character glow-red" id="sithJayden" src="image/ Sith Jayden_Windu .png" alt="Sith Jayden" style="top: 25%; right: 15%; opacity: 0;" />
-  <img class="character glow-blue" id="brandon" src="image/Brandon_Windu AKA Jedi Azarik.png" alt="Brandon" style="top: 50%; right: 35%; opacity: 0;" />
+  <img class="character glow-purple" id="jediSolis" src="image/Finn_Windu_ AKA Jedi Solis.png" alt="Jedi Solis" style="bottom: 10%; left: 5%; opacity: 0;" />
+  <img class="character glow-red" id="darthNightmare" src="image/Darth Nightmare.jpeg" alt="Darth Nightmare" style="bottom: 10%; left: 15%; opacity: 0;" />
+  <img class="character glow-red" id="sithJayden" src="image/ Sith Jayden_Windu .png" alt="Sith Jayden" style="bottom: 10%; left: 25%; opacity: 0;" />
+  <img class="character glow-blue" id="brandon" src="image/Brandon_Windu AKA Jedi Azarik.png" alt="Brandon" style="bottom: 10%; left: 35%; opacity: 0;" />
+  <img class="character glow-red" id="darthVitiate" src="image/Darth Vitiate .jpeg" alt="Darth Vitiate" style="bottom: 10%; left: 45%; opacity: 0;" />
+  <img class="character glow-purple" id="bigKnight" src="image/Big knight.jpeg" alt="Big Knight" style="bottom: 10%; left: 55%; opacity: 0;" />
+  <img class="character glow-blue" id="boomer" src="image/Boomer.jpeg" alt="Boomer" style="bottom: 10%; left: 65%; opacity: 0;" />
+  <img class="character glow-red" id="darthPaul" src="image/Darth Paul jpeg.jpeg" alt="Darth Paul" style="bottom: 10%; left: 75%; opacity: 0;" />
+  <img class="character glow-red" id="darthRenSon" src="image/Darth Ren son.jpeg" alt="Darth Ren Son" style="bottom: 10%; left: 85%; opacity: 0;" />
+  <img class="character glow-red" id="darthWolf" src="image/Darth Wolf.jpeg" alt="Darth Wolf" style="bottom: 10%; left: 95%; opacity: 0;" />
+  <img class="character glow-red" id="darthYoung" src="image/Darth Young .jpeg" alt="Darth Young" style="bottom: 10%; left: 90%; opacity: 0;" />
+  <img class="character glow-purple" id="deathOfRome" src="image/Death of Rome.jpeg" alt="Death of Rome" style="bottom: 10%; left: 95%; opacity: 0;" />
 
   <div class="crawl-container">
     <div class="crawl-text">
@@ -228,6 +276,14 @@
     showCharacter('darthNightmare', 3000); // 3 second delay
     showCharacter('sithJayden', 5000); // 5 second delay
     showCharacter('brandon', 7000); // 7 second delay
+    showCharacter('darthVitiate', 9000); // 9 second delay
+    showCharacter('bigKnight', 11000); // 11 second delay
+    showCharacter('boomer', 13000); // 13 second delay
+    showCharacter('darthPaul', 15000); // 15 second delay
+    showCharacter('darthRenSon', 17000); // 17 second delay
+    showCharacter('darthWolf', 19000); // 19 second delay
+    showCharacter('darthYoung', 21000); // 21 second delay
+    showCharacter('deathOfRome', 23000); // 23 second delay
     // Start the hyperspace effect after a delay
     startHyperspace();
   }
@@ -351,6 +407,41 @@
     // Delay hyperspace start for an initial starfield view
     setTimeout(drawHyperspace, 10000); // 10 seconds delay
   }
+
+  // Hide the new character after 20 seconds of being shown
+  setTimeout(() => {
+    const darthVitiate = document.getElementById('darthVitiate');
+    if (darthVitiate) {
+      darthVitiate.style.transition = 'opacity 2s ease-in-out';
+      darthVitiate.style.opacity = 0;
+    }
+  }, 29000); // 9s delay + 20s visible = 29s total
+
+  // Hide characters individually 20 seconds after they appear
+  const fadeOutDelays = {
+    jediSolis: 21000,       // 1s + 20s
+    darthNightmare: 23000,  // 3s + 20s
+    sithJayden: 25000,      // 5s + 20s
+    brandon: 27000,         // 7s + 20s
+    darthVitiate: 29000,    // 9s + 20s
+    bigKnight: 31000,       // 11s + 20s
+    boomer: 33000,          // 13s + 20s
+    darthPaul: 35000,       // 15s + 20s
+    darthRenSon: 37000,     // 17s + 20s
+    darthWolf: 39000,       // 19s + 20s
+    darthYoung: 41000,      // 21s + 20s
+    deathOfRome: 43000      // 23s + 20s
+  };
+
+  Object.entries(fadeOutDelays).forEach(([id, delay]) => {
+    setTimeout(() => {
+      const el = document.getElementById(id);
+      if (el) {
+        el.style.transition = 'opacity 2s ease-in-out';
+        el.style.opacity = 0;
+      }
+    }, delay);
+  });
 </script>
 </body>
 </html>
